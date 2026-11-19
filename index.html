@@ -240,7 +240,7 @@ dd{margin:0 0 6px;color:var(--muted)}
       <p class="foot">TCPA: tasa de crecimiento promedio anual 2019–2025. pp: puntos porcentuales. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
     </article>
     <div class="grid">
-      <article class="card"><p class="eyebrow">Gráfico 22</p><h3>Tasa de informalidad, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-inf"></div><p class="foot">2024 y 2025: informalidad construida con la metodología del consolidado de empleo OEE (el INEI no publicó ocupinf). Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 22</p><h3>Tasa de informalidad, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-inf"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
       <article class="card"><p class="eyebrow">Gráfico 23</p><h3>Afiliación a un sistema de pensiones, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-pen"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
@@ -461,7 +461,7 @@ function render(){
   document.getElementById("foot-rmv").textContent = `RMV de ${a}: S/ ${nf(RMV(a))}. Ingreso de la ocupación principal. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.`;
   document.querySelectorAll('[data-prom="edad"]').forEach(e => e.textContent = `Edad promedio: mujeres ${nf(M.edad,1)} años, hombres ${nf(H.edad,1)} años. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.`);
   const fi = document.getElementById("foot-inf");
-  fi.textContent = (a >= 2024 ? `${a}: informalidad construida con la metodología del consolidado de empleo OEE. ` : "Variable ocupinf del INEI. ") + "Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.";
+  fi.textContent = "Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.";
   document.getElementById("h-sector").textContent = `Emprendedores MYPE por sector económico, ${a}`;
   document.getElementById("h-ingsec").textContent = `Ingreso mensual promedio por sector, ${a}`;
   notaMype();
