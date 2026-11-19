@@ -142,7 +142,6 @@ dd{margin:0 0 6px;color:var(--muted)}
       <article class="card">
         <p class="eyebrow">Gráfico 1</p>
         <h3>Emprendedores según sexo, 2019–2025</h3>
-        <p class="desc" id="desc-serie"></p>
         <p class="note">Personas. La línea punteada es el porcentaje de mujeres (eje derecho).</p>
         <div class="legend" id="lg-serie"></div>
         <div class="chart" id="ch-serie"></div>
@@ -465,7 +464,6 @@ function render(){
   fi.textContent = (a >= 2024 ? `${a}: informalidad construida con la metodología del consolidado de empleo OEE. ` : "Variable ocupinf del INEI. ") + "Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.";
   document.getElementById("h-sector").textContent = `Emprendedores MYPE por sector económico, ${a}`;
   document.getElementById("h-ingsec").textContent = `Ingreso mensual promedio por sector, ${a}`;
-  descSerie();
   notaMype();
   legends(); charts();
 }
@@ -549,18 +547,6 @@ function takePanorama(a, M, mill){
   return txt + ".";
 }
 
-/* Descripcion del grafico 1 (se calcula con los datos de la serie completa) */
-function descSerie(){
-  const a0 = ANIOS[0], aN = ANIOS[ANIOS.length-1];
-  const pm = ANIOS.map(a => 100*tot("mype",a,2)/tot("mype",a,0));
-  const lo = Math.min(...pm), hi = Math.max(...pm), aHi = ANIOS[pm.indexOf(hi)];
-  const mN = tot("mype",aN,2), hN = tot("mype",aN,1), m0 = tot("mype",a0,2);
-  const mill = v => nf(v/1e6,1) + " millones";
-  document.getElementById("desc-serie").innerHTML =
-    `Entre ${a0} y ${aN}, la participación de las mujeres en los emprendimientos MYPE se mantuvo entre ${nf(lo,1)}% y ${nf(hi,1)}%, evidenciando una brecha persistente frente a los hombres. ` +
-    `En ${aN}, <b>${mill(mN)} de mujeres</b> lideraban emprendimientos MYPE (${nf(pm[pm.length-1],1)}%), frente a ${mill(hN)} de hombres (${nf(100-pm[pm.length-1],1)}%). ` +
-    `Aunque el número de emprendedoras se recuperó tras la caída de 2020, desde 2024 volvió a disminuir y en ${aN} se ubicó ${mN < m0 ? "por debajo" : "por encima"} del nivel de ${a0}; además, su participación se redujo respecto a ${aHi} (${nf(hi,1)}%), lo que muestra que aún existen desafíos para cerrar las brechas de género en el emprendimiento.`;
-}
 
 function charts(){
   const vis = document.querySelector(`section[data-panel="${S.tab}"]`);
@@ -683,5 +669,6 @@ render();
 setTab(location.hash.slice(1) || "panorama");
 })();
 </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "bdad1d1ac34f4ba79516a75f324588d4"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
