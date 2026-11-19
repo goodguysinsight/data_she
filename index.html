@@ -11,7 +11,7 @@
 <style>
 :root{
   /* Plan: cabecera de marca, barra de controles, mosaico de indicadores y tarjetas en grilla de 2 columnas */
-  --brand:#1F4E78; --mujer:#B5376F; --mujer-soft:#F3DCE7; --hombre:#7A8BA3; --hombre-soft:#E3E8EF;
+  --brand:#1F4E78; --mujer:#B5376F; --mujer-soft:#F3DCE7; --mujer-pct:#D02F86; --mujer-suave:#E9A2C6; --hombre:#7A8BA3; --hombre-soft:#E3E8EF;
   --bg:#F6F7F9; --panel:#FFFFFF; --fg:#1B2430; --muted:#5B6676; --line:#DCE1E8; --warn:#A35D00;
   --display:"Source Serif 4", Georgia, "Times New Roman", serif;
   --body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
@@ -19,12 +19,12 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --hombre:#9DAEC6; --hombre-soft:#2B3442;
+    --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --mujer-pct:#FF8CCB; --mujer-suave:#B9688F; --hombre:#9DAEC6; --hombre-soft:#2B3442;
     --bg:#11161D; --panel:#19212B; --fg:#E7ECF2; --muted:#A3AFBF; --line:#2C3644; --warn:#F2B35B; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --hombre:#9DAEC6; --hombre-soft:#2B3442;
+  --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --mujer-pct:#FF8CCB; --mujer-suave:#B9688F; --hombre:#9DAEC6; --hombre-soft:#2B3442;
   --bg:#11161D; --panel:#19212B; --fg:#E7ECF2; --muted:#A3AFBF; --line:#2C3644; --warn:#F2B35B; color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -83,6 +83,9 @@ select{font:inherit;font-size:14px;color:var(--fg);background:var(--panel);borde
 section[hidden]{display:none}
 section{display:grid;gap:14px}
 .lede{margin:0;max-width:80ch;color:var(--muted)}
+.take,.lede,.desc,.note,.foot,.site-foot,dd{text-align:justify}
+.sel-vals{margin:0 0 4px;font-size:13px;font-variant-numeric:tabular-nums;color:var(--muted)}
+.desc{margin:0;font-size:14px;line-height:1.55;background:var(--mujer-soft);border-left:3px solid var(--mujer);border-radius:6px;padding:9px 12px}
 table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
 th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
 th:first-child,td:first-child{text-align:left}
@@ -128,10 +131,6 @@ dd{margin:0 0 6px;color:var(--muted)}
     </div>
     <div class="ctrls">
       <label for="sel-anio">Año <select id="sel-anio"></select></label>
-      <span class="seg" role="group" aria-label="Universo">
-        <button type="button" data-u="mype" aria-pressed="true">Emprendedores MYPE</button>
-        <button type="button" data-u="todos" aria-pressed="false">Todos los emprendedores</button>
-      </span>
     </div>
   </div>
 
@@ -143,18 +142,19 @@ dd{margin:0 0 6px;color:var(--muted)}
       <article class="card">
         <p class="eyebrow">Gráfico 1</p>
         <h3>Emprendedores según sexo, 2019–2025</h3>
+        <p class="desc" id="desc-serie"></p>
         <p class="note">Personas. La línea punteada es el porcentaje de mujeres (eje derecho).</p>
         <div class="legend" id="lg-serie"></div>
         <div class="chart" id="ch-serie"></div>
-        <p class="foot">En 2020 la ENAHO se levantó mayormente por teléfono y en contexto de pandemia. Fuente: INEI – ENAHO.</p>
+        <p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
       </article>
       <article class="card">
         <p class="eyebrow">Gráfico 2</p>
         <h3 id="h-sector">Emprendedores por sector económico</h3>
-        <p class="note">Distribución porcentual dentro de cada sexo. A la derecha, porcentaje de mujeres en el sector.</p>
+        <p class="note">Distribución porcentual dentro de cada sexo. A la derecha (icono de mujer), porcentaje de mujeres en el sector.</p>
         <div class="legend lg-sexo"></div>
         <div class="chart" data-comp="sector7"></div>
-        <p class="foot">a/ Referencial: coeficiente de variación mayor a 15%. Fuente: INEI – ENAHO.</p>
+        <p class="foot">Otros: categorías con menos de 1% de los emprendedores MYPE en todos los años. a/ Referencial: coeficiente de variación mayor a 15%. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
       </article>
     </div>
   </section>
@@ -162,15 +162,15 @@ dd{margin:0 0 6px;color:var(--muted)}
   <!-- PERFIL -->
   <section id="perfil" data-panel="perfil" hidden>
     <h2>Perfil de las emprendedoras</h2>
-    <p class="lede">Cada gráfico compara la distribución de mujeres y hombres emprendedores. La etiqueta de la derecha indica qué porcentaje de cada grupo son mujeres.</p>
+    <p class="lede">Cada gráfico compara la distribución de mujeres y hombres emprendedores. La cifra con el icono de mujer, a la derecha, indica qué porcentaje de cada grupo son mujeres.</p>
     <div class="legend lg-sexo"></div>
     <div class="grid">
       <article class="card"><p class="eyebrow">Gráfico 3</p><h3>Grupo de edad</h3><div class="chart" data-comp="gedad"></div><p class="foot" data-prom="edad"></p></article>
-      <article class="card"><p class="eyebrow">Gráfico 4</p><h3>Nivel educativo alcanzado</h3><div class="chart" data-comp="neduc"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 5</p><h3>Lengua materna</h3><div class="chart" data-comp="lengua"></div><p class="foot">Lengua originaria: quechua, aimara y otras lenguas nativas. Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 6</p><h3>Jefatura de hogar</h3><div class="chart" data-comp="jefe"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 7</p><h3>Estado civil</h3><div class="chart" data-comp="ecivil"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 8</p><h3>Pobreza monetaria del hogar</h3><div class="chart" data-comp="pobre"></div><p class="foot">Fuente: INEI – ENAHO (Sumaria).</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 4</p><h3>Nivel educativo alcanzado</h3><div class="chart" data-comp="neduc"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 5</p><h3>Lengua materna</h3><div class="chart" data-comp="lengua"></div><p class="foot">Lengua originaria: quechua, aimara y otras lenguas nativas. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 6</p><h3>Jefatura de hogar</h3><div class="chart" data-comp="jefe"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 7</p><h3>Estado civil</h3><div class="chart" data-comp="ecivil"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 8</p><h3>Pobreza monetaria del hogar</h3><div class="chart" data-comp="pobre"></div><p class="foot">Fuente: INEI – ENAHO (Sumaria). Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
 
@@ -181,12 +181,13 @@ dd{margin:0 0 6px;color:var(--muted)}
       <article class="card" style="grid-row:span 2">
         <p class="eyebrow">Gráfico 9</p>
         <h3>Mujeres emprendedoras por región</h3>
-        <p class="note">Personas, ordenadas de mayor a menor. A la derecha, porcentaje de mujeres entre los emprendedores de la región.</p>
+        <p class="note">Personas, ordenadas de mayor a menor. A la derecha (icono de mujer), porcentaje de mujeres entre los emprendedores de la región.</p>
         <div class="chart" id="ch-region"></div>
-        <p class="foot">Lima Metropolitana corresponde a la provincia de Lima; Región Lima, a las demás provincias del departamento. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO.</p>
+        <p class="note" id="nota-otros-reg"></p>
+        <p class="foot">Lima Metropolitana corresponde a la provincia de Lima; Región Lima, a las demás provincias del departamento. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
       </article>
-      <article class="card"><p class="eyebrow">Gráfico 10</p><h3>Área de residencia</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="area"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 11</p><h3>Región natural</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="regnat"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 10</p><h3>Área de residencia</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="area"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 11</p><h3>Región natural</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="regnat"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
 
@@ -195,12 +196,12 @@ dd{margin:0 0 6px;color:var(--muted)}
     <h2>Formalidad y protección social</h2>
     <div class="legend lg-sexo"></div>
     <div class="grid">
-      <article class="card"><p class="eyebrow">Gráfico 12</p><h3>Informalidad del empleo</h3><div class="chart" data-comp="informal"></div><p class="foot" id="foot-inf">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 13</p><h3>Registro del negocio en SUNAT</h3><div class="chart" data-comp="sunat"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 14</p><h3>Tipo de seguro de salud</h3><div class="chart" data-comp="seguro_salud"></div><p class="foot">Fuente: INEI – ENAHO (módulo 400).</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 15</p><h3>Sistema de pensiones</h3><div class="chart" data-comp="tipo_sp"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 16</p><h3>Tamaño de la unidad productiva</h3><div class="chart" data-comp="tamano_emp"></div><p class="foot">Número de trabajadores en la unidad productiva. Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 17</p><h3>Empleo decente (MTPE)</h3><div class="chart" data-comp="ed_decente"></div><p class="foot">Cumple los cinco componentes: registro en SUNAT, ingreso igual o mayor a la RMV, hasta 48 horas, seguro de salud y pensión. Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 12</p><h3>Informalidad del empleo</h3><div class="chart" data-comp="informal"></div><p class="foot" id="foot-inf">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 13</p><h3>Registro del negocio en SUNAT</h3><div class="chart" data-comp="sunat"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 14</p><h3>Tipo de seguro de salud</h3><div class="chart" data-comp="seguro_salud"></div><p class="foot">Fuente: INEI – ENAHO (módulo 400). Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 15</p><h3>Sistema de pensiones</h3><div class="chart" data-comp="tipo_sp"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 16</p><h3>Tamaño de la unidad productiva</h3><div class="chart" data-comp="tamano_emp"></div><p class="foot">Número de trabajadores en la unidad productiva. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 17</p><h3>Empleo decente (MTPE)</h3><div class="chart" data-comp="ed_decente"></div><p class="foot">Cumple los cinco componentes: registro en SUNAT, ingreso igual o mayor a la RMV, hasta 48 horas, seguro de salud y pensión. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
 
@@ -215,18 +216,18 @@ dd{margin:0 0 6px;color:var(--muted)}
         <p class="note">Soles corrientes. Incluye pagos en especie y autoconsumo.</p>
         <div class="legend lg-sexo-l"></div>
         <div class="chart" id="ch-ing"></div>
-        <p class="foot">Valores nominales; para comparar entre años deben deflactarse. Fuente: INEI – ENAHO.</p>
+        <p class="foot">Valores nominales; para comparar entre años deben deflactarse. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
       </article>
       <article class="card">
         <p class="eyebrow">Gráfico 19</p>
         <h3 id="h-ingsec">Ingreso mensual promedio por sector</h3>
         <p class="note">Soles. A la derecha, brecha de ingreso de las mujeres respecto de los hombres.</p>
-        <div class="legend lg-sexo"></div>
+        <div class="legend lg-sexo-l"></div>
         <div class="chart" id="ch-ingsec"></div>
-        <p class="foot">Sectores con menos de 30 mujeres en la muestra no se muestran. Fuente: INEI – ENAHO.</p>
+        <p class="foot">Sectores con menos de 30 mujeres en la muestra no se muestran. Otros: categorías con menos de 1% de los emprendedores MYPE en todos los años. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
       </article>
       <article class="card"><p class="eyebrow">Gráfico 20</p><h3>Ingreso respecto a la Remuneración Mínima Vital</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="d_rmv"></div><p class="foot" id="foot-rmv"></p></article>
-      <article class="card"><p class="eyebrow">Gráfico 21</p><h3>Horas semanales trabajadas</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="rango_horas"></div><p class="foot">Total de horas en la ocupación principal y secundaria. Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 21</p><h3>Horas semanales trabajadas</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="rango_horas"></div><p class="foot">Total de horas en la ocupación principal y secundaria. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
 
@@ -237,11 +238,11 @@ dd{margin:0 0 6px;color:var(--muted)}
       <p class="eyebrow">Cuadro 1</p>
       <h3 id="h-tabla">Mujeres emprendedoras, 2019–2025</h3>
       <div class="tbl" id="tbl-serie"></div>
-      <p class="foot">TCPA: tasa de crecimiento promedio anual 2019–2025. pp: puntos porcentuales. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO.</p>
+      <p class="foot">TCPA: tasa de crecimiento promedio anual 2019–2025. pp: puntos porcentuales. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p>
     </article>
     <div class="grid">
-      <article class="card"><p class="eyebrow">Gráfico 22</p><h3>Tasa de informalidad, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-inf"></div><p class="foot">2024 y 2025: informalidad construida con la metodología del consolidado de empleo OEE (el INEI no publicó ocupinf). Fuente: INEI – ENAHO.</p></article>
-      <article class="card"><p class="eyebrow">Gráfico 23</p><h3>Afiliación a un sistema de pensiones, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-pen"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 22</p><h3>Tasa de informalidad, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-inf"></div><p class="foot">2024 y 2025: informalidad construida con la metodología del consolidado de empleo OEE (el INEI no publicó ocupinf). Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 23</p><h3>Afiliación a un sistema de pensiones, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-pen"></div><p class="foot">Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.</p></article>
     </div>
   </section>
 
@@ -257,106 +258,155 @@ const IDX = {}; // u|anio|dim|cod|sexo
 D.registros.forEach(r => { IDX[r.slice(0,5).join("|")] = {pob:r[5], cv:r[6], n:r[7], ing:r[8], horas:r[9], edad:r[10]}; });
 const ANIOS = D.anios;
 const S = {anio: ANIOS[ANIOS.length-1], u: "mype", tab: "panorama"};
-try { const u = localStorage.getItem("gg-me-u"); if (u === "mype" || u === "todos") S.u = u; } catch(e) {}
 
 const g = (u,a,dim,cod,s) => IDX[[u,a,dim,cod,s].join("|")];
 const cods = (u,a,dim) => Object.keys(LAB[dim]||{}).map(Number).filter(c => g(u,a,dim,c,0) || g(u,a,dim,c,1) || g(u,a,dim,c,2)).sort((x,y)=>x-y);
 const tot = (u,a,s) => (g(u,a,"uno",1,s)||{}).pob || 0;
 const share = (u,a,dim,cod,s) => { const r = g(u,a,dim,cod,s), t = tot(u,a,s); return r && t ? 100*r.pob/t : 0; };
 const ref = r => r && r.cv != null && r.cv > 15;
+/* Categorias con participacion menor a 1% en todos los anios se agrupan en "Otros" */
+const GRP = {};
+function grupos(dim){
+  if (GRP[dim]) return GRP[dim];
+  const all = Object.keys(LAB[dim]||{}).map(Number).sort((x,y)=>x-y);
+  const peq = all.filter(c => ANIOS.every(a => { const r = g("mype",a,dim,c,0), t = tot("mype",a,0); return !r || (t && 100*r.pob/t < 1); }));
+  const out = [];
+  all.forEach(c => { if (!(peq.length >= 2 && peq.includes(c))) out.push({cods:[c], label:LAB[dim][c]}); });
+  if (peq.length >= 2) out.push({cods:peq, label:"Otros", otros:true});
+  return (GRP[dim] = out);
+}
+function agg(a, dim, G, s){
+  const rs = G.cods.map(c => g("mype",a,dim,c,s)).filter(Boolean);
+  if (!rs.length) return null;
+  const pob = rs.reduce((x,r)=>x+r.pob,0);
+  const se = Math.sqrt(rs.reduce((x,r)=>x+Math.pow((r.cv||0)*r.pob/100,2),0));
+  const ingW = rs.filter(r=>r.ing!=null);
+  return {pob, n: rs.reduce((x,r)=>x+r.n,0), cv: pob ? 100*se/pob : null,
+          ing: ingW.length ? ingW.reduce((x,r)=>x+r.ing*r.pob,0)/ingW.reduce((x,r)=>x+r.pob,0) : null};
+}
 const nf = (x,d=0) => x == null || isNaN(x) ? "—" : x.toLocaleString("en-US",{minimumFractionDigits:d, maximumFractionDigits:d});
 const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
 const uName = () => S.u === "mype" ? "emprendedores MYPE" : "emprendedores";
 const ocupDim = () => S.u === "mype" ? "emp_mype" : "emprendedor";
 const NS = "http://www.w3.org/2000/svg";
 function el(tag, attrs, parent, text){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+/* icono de mujer (cabeza + vestido) centrado en cx, con base en by */
+function mujerIcon(svg, cx, by, col){
+  const gI = el("g",{fill:col, "aria-hidden":"true"}, svg);
+  el("circle",{cx:cx, cy:by-12.5, r:2.6}, gI);
+  el("path",{d:`M${cx-1.6},${by-9.2} L${cx+1.6},${by-9.2} L${cx+4.6},${by-2.4} L${cx+1.6},${by-2.4} L${cx+1.6},${by+1.2} L${cx+0.4},${by+1.2} L${cx+0.4},${by-2.4} L${cx-0.4},${by-2.4} L${cx-0.4},${by+1.2} L${cx-1.6},${by+1.2} L${cx-1.6},${by-2.4} L${cx-4.6},${by-2.4} Z`}, gI);
+}
+const ICON_HTML = col => `<svg width="11" height="15" viewBox="-5 -16 10 18" aria-hidden="true" style="vertical-align:-2px"><circle cx="0" cy="-12.5" r="2.6" fill="${col}"/><path fill="${col}" d="M-1.6,-9.2 L1.6,-9.2 L4.6,-2.4 L1.6,-2.4 L1.6,1.2 L0.4,1.2 L0.4,-2.4 L-0.4,-2.4 L-0.4,1.2 L-1.6,1.2 L-1.6,-2.4 L-4.6,-2.4 Z"/></svg>`;
 function svgIn(box, w, h){ box.innerHTML = ""; return el("svg", {viewBox:`0 0 ${w} ${h}`, role:"img"}, box); }
 const W = box => Math.max(300, Math.min(760, box.clientWidth || 560));
 
 /* ---------- Comparativo mujeres vs hombres (distribucion dentro de cada sexo) ---------- */
 function comp(box, dim){
-  const u = S.u, a = S.anio, cs = cods(u,a,dim);
-  const w = W(box), labW = Math.min(210, w*0.36), right = 64, bw = w - labW - right - 50;
-  const rowH = 40, h = cs.length*rowH + 8;
+  const a = S.anio, gs = grupos(dim).filter(G => agg(a,dim,G,0));
+  const w = W(box), labW = Math.min(210, w*0.36), right = 70, bw = w - labW - right - 50;
+  const rowH = 40, h = gs.length*rowH + 8;
   const svg = svgIn(box, w, h);
-  svg.setAttribute("aria-label", `Distribución de ${uName()} por ${dim}, mujeres y hombres`);
-  const mx = Math.max(1, ...cs.flatMap(c => [share(u,a,dim,c,1), share(u,a,dim,c,2)]));
-  cs.forEach((c,i) => {
+  svg.setAttribute("aria-label", `Distribución de emprendedores MYPE por ${dim}, mujeres y hombres`);
+  const sh = (G,s) => { const r = agg(a,dim,G,s), t = tot("mype",a,s); return r && t ? 100*r.pob/t : 0; };
+  const mx = Math.max(1, ...gs.flatMap(G => [sh(G,1), sh(G,2)]));
+  gs.forEach((G,i) => {
     const y = i*rowH + 4;
-    el("text",{x:0, y:y+19, class:"lab"}, svg, LAB[dim][c]);
+    el("text",{x:0, y:y+19, class:"lab"}, svg, G.label);
     [[2,"--mujer",0],[1,"--hombre",15]].forEach(([s,col,dy]) => {
-      const r = g(u,a,dim,c,s), v = share(u,a,dim,c,s), bwid = Math.max(1, bw*v/mx);
+      const r = agg(a,dim,G,s), v = sh(G,s), bwid = Math.max(1, bw*v/mx);
       el("rect",{x:labW, y:y+dy+2, width:bwid, height:13, rx:2, fill:css(col)}, svg);
       const t = el("text",{x:labW+bwid+5, y:y+dy+13, class:"val" + (ref(r)?" ref":"")}, svg, nf(v,1)+"%"+(ref(r)?" a/":""));
       if (s === 2) t.setAttribute("font-weight","600");
     });
-    const rt = g(u,a,dim,c,0), rm = g(u,a,dim,c,2);
+    const rt = agg(a,dim,G,0), rm = agg(a,dim,G,2);
     const pm = rt && rm ? 100*rm.pob/rt.pob : 0;
-    el("text",{x:w-2, y:y+19, "text-anchor":"end", class:"val", fill:css("--mujer"), style:`fill:${css("--mujer")};font-weight:600`}, svg, nf(pm,1)+"% M");
+    el("text",{x:w-14, y:y+19, "text-anchor":"end", class:"val", style:`fill:${css("--mujer-pct")};font-weight:600`}, svg, nf(pm,1)+"%");
+    mujerIcon(svg, w-6, y+20, css("--mujer-pct"));
   });
+  const ot = gs.find(G => G.otros);
+  let nt = box.nextElementSibling && box.nextElementSibling.classList.contains("otros-n") ? box.nextElementSibling : null;
+  if (ot && dim !== "sector7"){
+    if (!nt){ nt = document.createElement("p"); nt.className = "note otros-n"; box.after(nt); }
+    nt.textContent = `Otros: ${ot.cods.map(c => LAB[dim][c]).join(", ")} (menos de 1% de los emprendedores MYPE en todos los años).`;
+  } else if (nt) nt.remove();
 }
 
 /* ---------- Barras horizontales simples (region) ---------- */
 function regionChart(box){
-  const u = S.u, a = S.anio, cs = cods(u,a,"region").filter(c => g(u,a,"region",c,2));
-  cs.sort((x,y) => g(u,a,"region",y,2).pob - g(u,a,"region",x,2).pob);
-  const w = W(box), labW = 128, right = 70, bw = w - labW - right - 70, rowH = 22, h = cs.length*rowH + 6;
+  const a = S.anio, gs = grupos("region").filter(G => agg(a,"region",G,2));
+  gs.sort((x,y) => (x.otros?1:0)-(y.otros?1:0) || agg(a,"region",y,2).pob - agg(a,"region",x,2).pob);
+  const w = W(box), labW = 128, right = 70, bw = w - labW - right - 70, rowH = 22, h = gs.length*rowH + 6;
   const svg = svgIn(box, w, h);
-  svg.setAttribute("aria-label","Mujeres emprendedoras por región");
-  const mx = Math.max(...cs.map(c => g(u,a,"region",c,2).pob));
-  cs.forEach((c,i) => {
-    const y = i*rowH + 3, r = g(u,a,"region",c,2), t = g(u,a,"region",c,0), bwid = Math.max(1,bw*r.pob/mx);
-    el("text",{x:0, y:y+14, class:"lab"}, svg, LAB.region[c]);
+  svg.setAttribute("aria-label","Mujeres emprendedoras MYPE por región");
+  const mx = Math.max(...gs.map(G => agg(a,"region",G,2).pob));
+  gs.forEach((G,i) => {
+    const y = i*rowH + 3, r = agg(a,"region",G,2), t = agg(a,"region",G,0), bwid = Math.max(1,bw*r.pob/mx);
+    el("text",{x:0, y:y+14, class:"lab"}, svg, G.label);
     el("rect",{x:labW, y:y+3, width:bwid, height:14, rx:2, fill:css("--mujer"), opacity: ref(r)?0.55:1}, svg);
     el("text",{x:labW+bwid+5, y:y+14, class:"val"+(ref(r)?" ref":"")}, svg, nf(r.pob)+(ref(r)?" a/":""));
-    el("text",{x:w-2, y:y+14, "text-anchor":"end", style:`fill:${css("--mujer")};font-weight:600`}, svg, nf(100*r.pob/t.pob,1)+"% M");
+    el("text",{x:w-14, y:y+14, "text-anchor":"end", style:`fill:${css("--mujer-pct")};font-weight:600`}, svg, nf(100*r.pob/t.pob,1)+"%");
+    mujerIcon(svg, w-6, y+15, css("--mujer-pct"));
   });
+  const ot = gs.find(G=>G.otros);
+  const nota = document.getElementById("nota-otros-reg");
+  if (nota) nota.textContent = ot ? `Otros: ${ot.cods.map(c=>LAB.region[c]).join(", ")} (cada una con menos de 1% de los emprendedores MYPE en todos los años).` : "";
 }
 
 /* ---------- Lineas ---------- */
 function lineChart(box, series, opt){
-  const w = W(box), h = 250, m = {l:58, r: opt.y2 ? 50 : 18, t:14, b:28};
+  const w = W(box), h = 260, ax2 = opt.y2 ? 44 : 0, gut = 84, m = {l:58, r: ax2 + gut, t:16, b:28};
   const svg = svgIn(box, w, h);
   svg.setAttribute("aria-label", opt.label || "Serie 2019-2025");
-  const xs = ANIOS, iw = w-m.l-m.r, ih = h-m.t-m.b;
+  const xs = ANIOS, iw = w-m.l-m.r, ih = h-m.t-m.b, pr = m.l + iw;
   const ys = series.filter(s=>!s.y2).flatMap(s => s.v.filter(v=>v!=null));
   let lo = opt.min != null ? opt.min : Math.min(...ys), hi = Math.max(...ys);
   const pad = (hi-lo)*0.12 || 1; lo = opt.min != null ? opt.min : Math.max(0, lo-pad); hi = hi + pad;
+  const raw = (hi-lo)/4, p10 = Math.pow(10, Math.floor(Math.log10(raw)));
+  const step = [1,2,2.5,5,10].map(k=>k*p10).find(v => v >= raw);
+  lo = Math.floor(lo/step)*step; hi = Math.ceil(hi/step)*step;
   const X = i => m.l + iw*i/(xs.length-1), Y = v => m.t + ih*(1-(v-lo)/(hi-lo));
-  for (let k=0;k<=4;k++){ const v = lo + (hi-lo)*k/4, y = Y(v);
-    el("line",{x1:m.l, x2:w-m.r, y1:y, y2:y, class:"grid-l"}, svg);
-    el("text",{x:m.l-6, y:y+4, "text-anchor":"end"}, svg, opt.fmt(v)); }
+  for (let v = lo; v <= hi + step/2; v += step){ const y = Y(v);
+    el("line",{x1:m.l, x2:pr, y1:y, y2:y, class:"grid-l"}, svg);
+    el("text",{x:m.l-8, y:y+4, "text-anchor":"end"}, svg, opt.fmt(v)); }
   xs.forEach((a,i) => el("text",{x:X(i), y:h-8, "text-anchor":"middle", style: a===S.anio?`fill:${css("--fg")};font-weight:600`:""}, svg, a));
   let Y2;
   if (opt.y2){ const v2 = series.filter(s=>s.y2).flatMap(s=>s.v); const l2 = Math.max(0, Math.min(...v2)-3), h2 = Math.max(...v2)+3;
     Y2 = v => m.t + ih*(1-(v-l2)/(h2-l2));
-    [l2,(l2+h2)/2,h2].forEach(v => el("text",{x:w-m.r+6, y:Y2(v)+4}, svg, nf(v,0)+"%")); }
-  const labs = [];
+    [l2,(l2+h2)/2,h2].forEach(v => el("text",{x:pr+6, y:Y2(v)+4}, svg, nf(v,0)+"%")); }
+  const fy = s => s.y2 ? Y2 : Y;
   series.forEach(s => {
-    const f = s.y2 ? Y2 : Y, pts = s.v.map((v,i) => v==null?null:[X(i), f(v)]).filter(Boolean);
+    const f = fy(s), pts = s.v.map((v,i) => v==null?null:[X(i), f(v)]).filter(Boolean);
     if (s.area){ const p = `M${pts[0][0]},${Y(lo)} L` + pts.map(p=>p.join(",")).join(" L") + ` L${pts[pts.length-1][0]},${Y(lo)} Z`;
       el("path",{d:p, fill:s.c, opacity:0.10}, svg); }
     el("path",{d:"M"+pts.map(p=>p.join(",")).join(" L"), fill:"none", stroke:s.c, "stroke-width": s.w||2.5, "stroke-dasharray": s.dash||""}, svg);
     s.v.forEach((v,i) => { if (v==null) return; const sel = xs[i]===S.anio;
-      el("circle",{cx:X(i), cy:f(v), r: sel?5:3, fill: sel? s.c : css("--panel"), stroke:s.c, "stroke-width":2}, svg);
-      if (sel) labs.push({x:X(i), y:f(v), last:i===xs.length-1, first:i===0, c:s.c, t:(s.y2?nf(v,1)+"%":opt.fmt(v,true))});
-    });
+      el("circle",{cx:X(i), cy:f(v), r: sel?5:3, fill: sel? s.c : css("--panel"), stroke:s.c, "stroke-width":2}, svg); });
   });
-  /* etiquetas del anio seleccionado sin superposicion */
-  labs.sort((p,q) => p.y - q.y);
-  labs.forEach((L,k) => { L.ly = L.y - 10; if (k>0 && L.ly - labs[k-1].ly < 15) L.ly = labs[k-1].ly + 15; });
-  labs.forEach(L => {
-    const anchor = L.last ? "end" : (L.first ? "start" : "middle"), dx = L.last ? -8 : (L.first ? 8 : 0);
-    const t = el("text",{x:L.x+dx, y:Math.max(12, L.ly), "text-anchor":anchor, class:"val", style:`fill:${L.c};font-weight:600;paint-order:stroke;stroke:${css("--panel")};stroke-width:4px`}, svg, L.t);
+  const txt = (s,v) => s.y2 ? nf(v,1)+"%" : opt.fmt(v,true);
+  const halo = c => `fill:${c};font-weight:600;paint-order:stroke;stroke:${css("--panel")};stroke-width:4px;stroke-linejoin:round`;
+  /* 1) ultimo anio: etiquetas en el margen derecho, fuera de las lineas */
+  const last = xs.length-1, L = series.map(s => ({c:s.c, y:fy(s)(s.v[last]), t:txt(s,s.v[last])})).filter(o=>!isNaN(o.y));
+  L.sort((p,q)=>p.y-q.y);
+  L.forEach((o,k) => { o.ly = o.y + 4; if (k>0 && o.ly - L[k-1].ly < 15) o.ly = L[k-1].ly + 15; });
+  L.forEach(o => {
+    el("text",{x:pr+ax2+6, y:o.ly, class:"val", style:halo(o.c)}, svg, o.t);
   });
+  /* 2) anio seleccionado (si no es el ultimo): valores en una linea sobre el grafico, sin tocar las lineas */
+  const si = xs.indexOf(S.anio);
+  if (si >= 0 && si !== last){
+    const fila = document.createElement("p");
+    fila.className = "sel-vals";
+    fila.innerHTML = `<b>${S.anio}:</b> ` + series.map(s => `<span style="color:${s.c};font-weight:600">${s.nombre ? s.nombre + " " : ""}${txt(s, s.v[si])}</span>`).join(" · ");
+    box.insertBefore(fila, box.firstChild);
+  }
 }
 
 /* ---------- Leyendas ---------- */
 function legends(){
   const M = css("--mujer"), H = css("--hombre");
-  document.querySelectorAll(".lg-sexo").forEach(e => e.innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span>% M: participación de mujeres</span>`);
+  document.querySelectorAll(".lg-sexo").forEach(e => e.innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span>${ICON_HTML(css("--mujer-pct"))} % de mujeres en la categoría</span>`);
   document.querySelectorAll(".lg-sexo-l").forEach(e => e.innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span>`);
-  document.getElementById("lg-serie").innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span><i style="background:${css("--brand")}"></i>% mujeres</span>`;
+  document.getElementById("lg-serie").innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span><i style="background:${css("--mujer-suave")}"></i>% mujeres (eje derecho)</span>`;
 }
 
 /* ---------- Indicadores ---------- */
@@ -386,28 +436,130 @@ function render(){
   const a = S.anio, M = ind(a,2), H = ind(a,1), P = ANIOS.includes(a-1) ? ind(a-1,2) : null;
   const brecha = 100*(H.ing - M.ing)/H.ing;
   document.getElementById("tiles").innerHTML =
-    tile(`Mujeres ${uName()}`, nf(M.pob), (P?delta(M.pob,P.pob,false):"") + (M.cvp>15?" · a/":"")) +
+    tile("Mujeres emprendedoras MYPE", nf(M.pob), (P?delta(M.pob,P.pob,false):"") + (M.cvp>15?" · a/":"")) +
     tile("Participación de mujeres", nf(M.pctM,1)+"%", P?delta(M.pctM,P.pctM,true):"") +
     tile("Tasa de emprendimiento", nf(M.tasa,1)+"%", `de las ocupadas · <span class="h">hombres ${nf(H.tasa,1)}%</span>`) +
     tile("Informalidad", nf(M.inf,1)+"%", `<span class="h">hombres ${nf(H.inf,1)}%</span>`) +
     tile("Ingreso mensual promedio", "S/ "+nf(M.ing,0), `<span class="h">hombres S/ ${nf(H.ing,0)}</span> · brecha ${nf(brecha,1)}%`) +
     tile("Afiliadas a pensiones", nf(M.pen,1)+"%", `<span class="h">hombres ${nf(H.pen,1)}%</span>`);
-  document.getElementById("tiles-note").textContent = `Indicadores de mujeres ${uName()}, ${a}. Variación respecto de ${a-1}: en porcentaje para personas y en puntos porcentuales (pp) para tasas.`;
-  document.getElementById("take").innerHTML =
-    `En ${a}, <b>${nf(M.pob)} mujeres</b> conducían un emprendimiento${S.u==="mype"?" MYPE":""}, el <b>${nf(M.pctM,1)}%</b> del total de ${uName()}. ` +
-    `El <b>${nf(M.inf,1)}%</b> de ellas tenía empleo informal y su ingreso mensual promedio fue de <b>S/ ${nf(M.ing,0)}</b>, ${nf(brecha,1)}% menor que el de los hombres.`;
+  document.getElementById("tiles-note").textContent = `Indicadores de mujeres emprendedoras MYPE, ${a}. Variación respecto de ${a-1}: en porcentaje para personas y en puntos porcentuales (pp) para tasas.`;
+  const mill = M.pob >= 1e6 ? `${nf(M.pob/1e6,1)} millones` : nf(M.pob);
+  S.takeGeneral =
+    `En ${a}, <b>${mill} de mujeres</b> lideraban emprendimientos MYPE en el Perú, representando el <b>${nf(M.pctM,1)}%</b> del total de emprendedores. ` +
+    `Sin embargo, persisten importantes brechas laborales y económicas: el <b>${nf(M.inf,1)}%</b> se encontraba en situación de empleo informal y percibía un ingreso mensual promedio de <b>S/ ${nf(M.ing,0)}</b>, equivalente a <b>${nf(brecha,1)}%</b> menos que el ingreso de los hombres.`;
+  S.takePanorama = takePanorama(a, M, mill);
+  S.takePerfil = takePerfil(a, M);
+  S.takeTerritorio = takeTerritorio(a);
+  S.takeFormalidad = takeFormalidad(a);
+  S.takeIngresos = takeIngresos(a, M, H, brecha);
+  S.takeSerie = takeSerie();
+  encabezado();
   document.getElementById("tiles-ing").innerHTML =
     tile("Ingreso mensual promedio, mujeres", "S/ "+nf(M.ing,0), `<span class="h">hombres S/ ${nf(H.ing,0)}</span>`) +
     tile("Brecha de ingreso", nf(brecha,1)+"%", "respecto del ingreso de los hombres") +
     tile("Ingreso igual o mayor a la RMV", nf(M.rmv,1)+"%", `RMV S/ ${nf(RMV(a))} · <span class="h">hombres ${nf(H.rmv,1)}%</span>`) +
     tile("Horas semanales promedio", nf(M.horas,1), `<span class="h">hombres ${nf(H.horas,1)}</span>`);
-  document.getElementById("foot-rmv").textContent = `RMV de ${a}: S/ ${nf(RMV(a))}. Ingreso de la ocupación principal. Fuente: INEI – ENAHO.`;
-  document.querySelectorAll('[data-prom="edad"]').forEach(e => e.textContent = `Edad promedio: mujeres ${nf(M.edad,1)} años, hombres ${nf(H.edad,1)} años. Fuente: INEI – ENAHO.`);
+  document.getElementById("foot-rmv").textContent = `RMV de ${a}: S/ ${nf(RMV(a))}. Ingreso de la ocupación principal. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.`;
+  document.querySelectorAll('[data-prom="edad"]').forEach(e => e.textContent = `Edad promedio: mujeres ${nf(M.edad,1)} años, hombres ${nf(H.edad,1)} años. Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.`);
   const fi = document.getElementById("foot-inf");
-  fi.textContent = (a >= 2024 ? `${a}: informalidad construida con la metodología del consolidado de empleo OEE. ` : "Variable ocupinf del INEI. ") + "Fuente: INEI – ENAHO.";
-  document.getElementById("h-sector").textContent = `${uName()[0].toUpperCase()+uName().slice(1)} por sector económico, ${a}`;
+  fi.textContent = (a >= 2024 ? `${a}: informalidad construida con la metodología del consolidado de empleo OEE. ` : "Variable ocupinf del INEI. ") + "Fuente: INEI – ENAHO. Elaboración: Good Guys Insight.";
+  document.getElementById("h-sector").textContent = `Emprendedores MYPE por sector económico, ${a}`;
   document.getElementById("h-ingsec").textContent = `Ingreso mensual promedio por sector, ${a}`;
+  descSerie();
+  notaMype();
   legends(); charts();
+}
+
+/* Nota comun en todos los graficos y cuadros */
+function notaMype(){
+  const N = "Nota: incluye MYPE formal e informal. ";
+  document.querySelectorAll(".foot").forEach(f => { if (!f.textContent.startsWith("Nota:")) f.insertAdjacentText("afterbegin", N); });
+  const tn = document.getElementById("tiles-note");
+  if (tn && !tn.textContent.startsWith("Nota:")) tn.insertAdjacentText("afterbegin", N);
+}
+
+/* Encabezado segun la seccion activa */
+function encabezado(){
+  const t = {panorama: S.takePanorama, perfil: S.takePerfil, territorio: S.takeTerritorio, formalidad: S.takeFormalidad, ingresos: S.takeIngresos, serie: S.takeSerie};
+  document.getElementById("take").innerHTML = (t[S.tab] || S.takeGeneral).replace(/S\/ /g, "S/\u00a0");
+}
+function takeSerie(){
+  const a0 = ANIOS[0], aN = ANIOS[ANIOS.length-1];
+  const inf = (a,s) => share("mype",a,"informal",1,s), pen = (a,s) => 100 - share("mype",a,"tipo_sp",3,s);
+  const i0 = inf(a0,2), iN = inf(aN,2);
+  return `Entre ${a0} y ${aN}, la informalidad laboral de las mujeres emprendedoras MYPE ${iN > i0 ? "aumentó" : "disminuyó"} (de ${nf(i0,1)}% en ${a0}), alcanzando el <b>${nf(iN,1)}%</b> en ${aN}, prácticamente igual a la de los hombres (${nf(inf(aN,1),1)}%). ` +
+    `Sin embargo, persiste una importante brecha en la protección social: solo el <b>${nf(pen(aN,2),1)}%</b> de las emprendedoras estaba afiliada a un sistema de pensiones, frente al ${nf(pen(aN,1),1)}% de los hombres. ` +
+    `Estos resultados evidencian que la elevada informalidad y la limitada cobertura previsional siguen siendo desafíos estructurales del emprendimiento MYPE, especialmente para la seguridad económica de las mujeres durante la vejez.`;
+}
+function takeIngresos(a, M, H, brecha){
+  const sh = (dim,c) => share("mype",a,dim,c,2);
+  const gs = grupos("sector7").map(G => ({l:G.label.toLowerCase(), m:agg(a,"sector7",G,2), h:agg(a,"sector7",G,1)}))
+    .filter(o => o.m && o.h && o.m.n >= 30 && o.m.ing != null && o.h.ing)
+    .map(o => ({l:o.l, b:100*(o.h.ing-o.m.ing)/o.h.ing})).sort((x,y)=>y.b-x.b);
+  const sec = gs.slice(0,2).map(o => `${o.l} (−${nf(o.b,1)}%)`).join(" y ");
+  return `En ${a}, las mujeres emprendedoras MYPE percibieron un ingreso mensual promedio de <b>S/ ${nf(M.ing,0)}</b>, frente a S/ ${nf(H.ing,0)} de los hombres, una brecha de <b>${nf(brecha,1)}%</b>. ` +
+    `Las mayores desigualdades se registraron en ${sec}. ` +
+    `Además, el <b>${nf(sh("d_rmv",0),1)}%</b> de las emprendedoras obtuvo ingresos inferiores a la Remuneración Mínima Vital (S/ ${nf(RMV(a))}) y el <b>${nf(sh("rango_horas",4),1)}%</b> trabajó 48 horas semanales o más. ` +
+    `Estos resultados evidencian que, pese a su participación en la actividad empresarial, las mujeres enfrentan menores ingresos y condiciones laborales que limitan su autonomía económica.`;
+}
+function takeFormalidad(a){
+  const sh = (dim,c) => share("mype",a,dim,c,2);
+  return `En ${a}, las mujeres emprendedoras MYPE enfrentaron importantes brechas de formalización y protección social. ` +
+    `El <b>${nf(sh("informal",1),1)}%</b> tenía empleo informal, el <b>${nf(sh("sunat",3),1)}%</b> no registraba su negocio en SUNAT y el <b>${nf(sh("tamano_emp",1),1)}%</b> desarrollaba sus actividades en microempresas. ` +
+    `Aunque el <b>${nf(sh("seguro_salud",3),1)}%</b> contaba únicamente con el SIS, el <b>${nf(sh("tipo_sp",3),1)}%</b> no estaba afiliada a un sistema de pensiones. ` +
+    `Además, apenas el <b>${nf(sh("ed_decente",1),1)}%</b> cumplía con las cinco condiciones de empleo decente evaluadas por el MTPE. ` +
+    `Estos resultados evidencian que el principal desafío del emprendimiento femenino no es solo generar ingresos, sino mejorar la formalización, la calidad del empleo y el acceso a la protección social.`;
+}
+function takeTerritorio(a){
+  const sh = (dim,c) => share("mype",a,dim,c,2);
+  const R = grupos("region").filter(G => !G.otros).map(G => ({l:G.label, m:agg(a,"region",G,2), t:agg(a,"region",G,0)}))
+            .filter(o => o.m && o.t && !ref(o.m)).map(o => ({l:o.l, n:o.m.pob, p:100*o.m.pob/o.t.pob}));
+  const porN = R.slice().sort((x,y)=>y.n-x.n), porP = R.slice().sort((x,y)=>y.p-x.p);
+  const mil = v => `${nf(v/1000,0)} mil`;
+  const hi = porP[0], lo = porP[porP.length-1];
+  const nat = [1,2,3].map(c => ({l:LAB.regnat[c].toLowerCase(), v:sh("regnat",c)})).sort((x,y)=>y.v-x.v);
+  return `En ${a}, ${porN[0].l} (${mil(porN[0].n)}) y ${porN[1].l} (${mil(porN[1].n)}) concentraron el mayor número de mujeres emprendedoras MYPE. ` +
+    `Sin embargo, existen importantes diferencias territoriales: en ${hi.l}, las mujeres representaron el <b>${nf(hi.p,1)}%</b> de los emprendedores, frente al <b>${nf(lo.p,1)}%</b> en ${lo.l}. ` +
+    `Asimismo, el <b>${nf(sh("area",1),1)}%</b> de las emprendedoras residía en zonas urbanas, mientras que el <b>${nf(sh("area",2),1)}%</b> vivía en áreas rurales. ` +
+    `Por región natural, la ${nat[0].l} concentró la mayor proporción de emprendedoras (<b>${nf(nat[0].v,1)}%</b>), seguida de la ${nat[1].l} (${nf(nat[1].v,1)}%) y la ${nat[2].l} (${nf(nat[2].v,1)}%). ` +
+    `Estos resultados evidencian que el emprendimiento femenino presenta características y brechas territoriales diferenciadas.`;
+}
+function takePerfil(a, M){
+  const sh = (dim,c) => share("mype",a,dim,c,2);
+  const ed = grupos("gedad").map(G => ({l:G.label, v:sh("gedad",G.cods[0])})).sort((x,y)=>y.v-x.v)[0];
+  const rango = ed.l.replace(/^De /,"").replace(" a ", " y ").replace(" años","");
+  return `En ${a}, las mujeres emprendedoras MYPE se concentraron principalmente entre los ${rango} años (<b>${nf(ed.v,1)}%</b>), con una edad promedio de <b>${nf(M.edad,1)} años</b>. ` +
+    `El <b>${nf(sh("neduc",2)+sh("neduc",3),1)}%</b> tenía educación primaria o secundaria, el <b>${nf(sh("lengua",2),1)}%</b> una lengua originaria como lengua materna y el <b>${nf(sh("jefe",1),1)}%</b> era jefa de hogar. ` +
+    `Asimismo, el <b>${nf(sh("ecivil",1),1)}%</b> estaba casada o convivía con su pareja y el <b>${nf(sh("pobre",1),1)}%</b> pertenecía a hogares en situación de pobreza monetaria. ` +
+    `Estos resultados reflejan la importancia del emprendimiento femenino como fuente de ingresos y la necesidad de fortalecer sus oportunidades de capacitación, formalización y crecimiento empresarial.`;
+}
+function takePanorama(a, M, mill){
+  const pm = ANIOS.map(x => 100*tot("mype",x,2)/tot("mype",x,0));
+  const lo = Math.min(...pm), hi = Math.max(...pm);
+  const gs = grupos("sector7").map(G => ({G, m: agg(a,"sector7",G,2), t: agg(a,"sector7",G,0)})).filter(o => o.m && o.t);
+  const top = gs.slice().sort((x,y) => y.m.pob - x.m.pob).slice(0,3);
+  const lista = top.map(o => `${o.G.label.toLowerCase()} (${nf(100*o.m.pob/tot("mype",a,2),1)}%)`);
+  const may = gs.filter(o => 100*o.m.pob/o.t.pob > 50);
+  const yy = arr => arr.length > 1 ? arr.slice(0,-1).join(", ") + " y " + arr[arr.length-1] : arr[0];
+  const pmMay = may.length ? 100*may.reduce((x,o)=>x+o.m.pob,0)/may.reduce((x,o)=>x+o.t.pob,0) : null;
+  let txt = `En ${a}, <b>${mill} de mujeres</b> lideraban emprendimientos MYPE en el Perú, representando el <b>${nf(M.pctM,1)}%</b> del total, frente al ${nf(100-M.pctM,1)}% de hombres. ` +
+    `Su participación se ha mantenido relativamente estable entre ${ANIOS[0]} y ${ANIOS[ANIOS.length-1]} (entre ${nf(lo,1)}% y ${nf(hi,1)}%), evidenciando una brecha de género persistente. ` +
+    `Además, las emprendedoras se concentran principalmente en ${yy(lista)}`;
+  if (may.length) txt += `, con una presencia mayoritaria en ${yy(may.map(o=>o.G.label.toLowerCase()))}, donde representan cerca del <b>${nf(pmMay,0)}%</b> de los emprendedores`;
+  return txt + ".";
+}
+
+/* Descripcion del grafico 1 (se calcula con los datos de la serie completa) */
+function descSerie(){
+  const a0 = ANIOS[0], aN = ANIOS[ANIOS.length-1];
+  const pm = ANIOS.map(a => 100*tot("mype",a,2)/tot("mype",a,0));
+  const lo = Math.min(...pm), hi = Math.max(...pm), aHi = ANIOS[pm.indexOf(hi)];
+  const mN = tot("mype",aN,2), hN = tot("mype",aN,1), m0 = tot("mype",a0,2);
+  const mill = v => nf(v/1e6,1) + " millones";
+  document.getElementById("desc-serie").innerHTML =
+    `Entre ${a0} y ${aN}, la participación de las mujeres en los emprendimientos MYPE se mantuvo entre ${nf(lo,1)}% y ${nf(hi,1)}%, evidenciando una brecha persistente frente a los hombres. ` +
+    `En ${aN}, <b>${mill(mN)} de mujeres</b> lideraban emprendimientos MYPE (${nf(pm[pm.length-1],1)}%), frente a ${mill(hN)} de hombres (${nf(100-pm[pm.length-1],1)}%). ` +
+    `Aunque el número de emprendedoras se recuperó tras la caída de 2020, desde 2024 volvió a disminuir y en ${aN} se ubicó ${mN < m0 ? "por debajo" : "por encima"} del nivel de ${a0}; además, su participación se redujo respecto a ${aHi} (${nf(hi,1)}%), lo que muestra que aún existen desafíos para cerrar las brechas de género en el emprendimiento.`;
 }
 
 function charts(){
@@ -416,46 +568,46 @@ function charts(){
   const M = css("--mujer"), H = css("--hombre"), B = css("--brand");
   if (S.tab === "panorama"){
     lineChart(document.getElementById("ch-serie"), [
-      {c:M, v:ANIOS.map(a=>tot(S.u,a,2)), area:true},
-      {c:H, v:ANIOS.map(a=>tot(S.u,a,1))},
-      {c:B, v:ANIOS.map(a=>100*tot(S.u,a,2)/tot(S.u,a,0)), y2:true, dash:"5 4", w:2}
+      {c:M, nombre:"Mujeres", v:ANIOS.map(a=>tot(S.u,a,2)), area:true},
+      {c:H, nombre:"Hombres", v:ANIOS.map(a=>tot(S.u,a,1))},
+      {c:css("--mujer-suave"), nombre:"% mujeres", v:ANIOS.map(a=>100*tot(S.u,a,2)/tot(S.u,a,0)), y2:true, dash:"5 4", w:2.5}
     ], {fmt:(v,lbl)=> lbl ? nf(v) : nf(v/1e6,1)+" M", y2:true, label:"Emprendedores por sexo 2019-2025"});
   }
   if (S.tab === "territorio") regionChart(document.getElementById("ch-region"));
   if (S.tab === "ingresos"){
     lineChart(document.getElementById("ch-ing"), [
-      {c:M, v:ANIOS.map(a=>(g(S.u,a,"uno",1,2)||{}).ing), area:true},
-      {c:H, v:ANIOS.map(a=>(g(S.u,a,"uno",1,1)||{}).ing)}
+      {c:M, nombre:"Mujeres", v:ANIOS.map(a=>(g(S.u,a,"uno",1,2)||{}).ing), area:true},
+      {c:H, nombre:"Hombres", v:ANIOS.map(a=>(g(S.u,a,"uno",1,1)||{}).ing)}
     ], {fmt:(v,l)=>"S/ "+nf(v,0), label:"Ingreso promedio por sexo"});
     ingSector(document.getElementById("ch-ingsec"));
   }
   if (S.tab === "serie"){
     lineChart(document.getElementById("ch-inf"), [
-      {c:M, v:ANIOS.map(a=>share(S.u,a,"informal",1,2)), area:true},
-      {c:H, v:ANIOS.map(a=>share(S.u,a,"informal",1,1))}], {fmt:(v)=>nf(v,1)+"%", label:"Informalidad"});
+      {c:M, nombre:"Mujeres", v:ANIOS.map(a=>share(S.u,a,"informal",1,2)), area:true},
+      {c:H, nombre:"Hombres", v:ANIOS.map(a=>share(S.u,a,"informal",1,1))}], {fmt:(v)=>nf(v,1)+"%", label:"Informalidad"});
     lineChart(document.getElementById("ch-pen"), [
-      {c:M, v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,2)), area:true},
-      {c:H, v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,1))}], {fmt:(v)=>nf(v,1)+"%", min:0, label:"Afiliación a pensiones"});
+      {c:M, nombre:"Mujeres", v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,2)), area:true},
+      {c:H, nombre:"Hombres", v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,1))}], {fmt:(v)=>nf(v,1)+"%", min:0, label:"Afiliación a pensiones"});
     tabla();
   }
 }
 
 function ingSector(box){
-  const u = S.u, a = S.anio, cs = cods(u,a,"sector7").filter(c => { const r = g(u,a,"sector7",c,2); return r && r.n >= 30 && g(u,a,"sector7",c,1); });
-  const w = W(box), labW = 150, right = 70, bw = w-labW-right-60, rowH = 40, h = cs.length*rowH+6;
+  const a = S.anio, gs = grupos("sector7").filter(G => { const r = agg(a,"sector7",G,2); return r && r.n >= 30 && agg(a,"sector7",G,1); });
+  const w = W(box), labW = 150, right = 70, bw = w-labW-right-60, rowH = 40, h = gs.length*rowH+6;
   const svg = svgIn(box, w, h);
   svg.setAttribute("aria-label","Ingreso promedio por sector y sexo");
-  const mx = Math.max(...cs.flatMap(c => [g(u,a,"sector7",c,1).ing, g(u,a,"sector7",c,2).ing]));
-  cs.forEach((c,i) => {
-    const y = i*rowH+4, rm = g(u,a,"sector7",c,2), rh = g(u,a,"sector7",c,1);
-    el("text",{x:0, y:y+19, class:"lab"}, svg, LAB.sector7[c]);
+  const mx = Math.max(...gs.flatMap(G => [agg(a,"sector7",G,1).ing, agg(a,"sector7",G,2).ing]));
+  gs.forEach((G,i) => {
+    const y = i*rowH+4, rm = agg(a,"sector7",G,2), rh = agg(a,"sector7",G,1);
+    el("text",{x:0, y:y+19, class:"lab"}, svg, G.label);
     [[rm,"--mujer",0],[rh,"--hombre",15]].forEach(([r,col,dy]) => {
       const bwid = Math.max(1, bw*r.ing/mx);
       el("rect",{x:labW, y:y+dy+2, width:bwid, height:13, rx:2, fill:css(col)}, svg);
       el("text",{x:labW+bwid+5, y:y+dy+13, class:"val"}, svg, "S/ "+nf(r.ing,0));
     });
     const b = 100*(rh.ing-rm.ing)/rh.ing;
-    el("text",{x:w-2, y:y+19, "text-anchor":"end", style:`fill:${css("--mujer")};font-weight:600`}, svg, (b>=0?"−":"+")+nf(Math.abs(b),1)+"%");
+    el("text",{x:w-2, y:y+19, "text-anchor":"end", style:`fill:${css("--mujer-pct")};font-weight:600`}, svg, (b>=0?"−":"+")+nf(Math.abs(b),1)+"%");
   });
 }
 
@@ -490,14 +642,6 @@ const sel = document.getElementById("sel-anio");
 ANIOS.slice().reverse().forEach(a => { const o = document.createElement("option"); o.value = a; o.textContent = a; sel.appendChild(o); });
 sel.value = S.anio;
 sel.addEventListener("change", () => { S.anio = +sel.value; render(); });
-document.querySelectorAll(".seg button").forEach(b => {
-  b.setAttribute("aria-pressed", b.dataset.u === S.u);
-  b.addEventListener("click", () => {
-    S.u = b.dataset.u; try { localStorage.setItem("gg-me-u", S.u); } catch(e) {}
-    document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x.dataset.u === S.u));
-    render();
-  });
-});
 const TABS = [...document.querySelectorAll(".tab")].map(t => t.dataset.tab);
 function setTab(t, push){
   if (!TABS.includes(t)) t = "panorama";
@@ -505,6 +649,7 @@ function setTab(t, push){
   document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
   document.querySelectorAll("section[data-panel]").forEach(s => s.hidden = s.dataset.panel !== t);
   if (push) try { history.replaceState(null, "", "#"+t); } catch(e) { location.hash = t; }
+  if (S.takeGeneral) encabezado();
   charts();
 }
 document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab, true)));
@@ -526,7 +671,7 @@ bv.addEventListener("click", () => {
     const sy = window.speechSynthesis;
     if (!sy) { bv.querySelector("span").textContent = "Voz no disponible"; return; }
     if (sy.speaking) { sy.cancel(); bv.querySelector("span").textContent = "Escuchar resumen"; return; }
-    const txt = document.getElementById("take").textContent.replace(/S\/ /g, "soles ").replace(/%/g, " por ciento");
+    const txt = document.getElementById("take").textContent.replace(/S\/[\s\u00a0]/g, "soles ").replace(/%/g, " por ciento");
     const ut = new SpeechSynthesisUtterance(txt); ut.lang = "es-PE"; ut.rate = 1;
     const v = sy.getVoices().find(v => /^es/i.test(v.lang)); if (v) ut.voice = v;
     ut.onend = () => bv.querySelector("span").textContent = "Escuchar resumen";
