@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mujeres emprendedoras en el Perú</title>
+<meta name="description" content="Tablero de mujeres emprendedoras en la MYPE con datos de la ENAHO 2019-2025 (INEI). Elaboración: Good Guys Insight.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  /* Plan: cabecera de marca, barra de controles, mosaico de indicadores y tarjetas en grilla de 2 columnas */
+  --brand:#1F4E78; --mujer:#B5376F; --mujer-soft:#F3DCE7; --hombre:#7A8BA3; --hombre-soft:#E3E8EF;
+  --bg:#F6F7F9; --panel:#FFFFFF; --fg:#1B2430; --muted:#5B6676; --line:#DCE1E8; --warn:#A35D00;
+  --display:"Source Serif 4", Georgia, "Times New Roman", serif;
+  --body:"IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --r:10px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --hombre:#9DAEC6; --hombre-soft:#2B3442;
+    --bg:#11161D; --panel:#19212B; --fg:#E7ECF2; --muted:#A3AFBF; --line:#2C3644; --warn:#F2B35B; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --brand:#8DBCE6; --mujer:#F07BAE; --mujer-soft:#4A2537; --hombre:#9DAEC6; --hombre-soft:#2B3442;
+  --bg:#11161D; --panel:#19212B; --fg:#E7ECF2; --muted:#A3AFBF; --line:#2C3644; --warn:#F2B35B; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.page{max-width:1240px;margin:0 auto;padding:20px 20px 40px;display:grid;gap:18px;grid-template-columns:minmax(0,1fr)}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(24px,3.2vw,34px);line-height:1.15}
+h2{font-size:22px}
+h3{font-size:17px;line-height:1.3}
+.head{display:grid;gap:12px;border-bottom:3px solid var(--brand);padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand>div{min-width:0;display:grid;gap:4px}
+.gg-logo{width:56px;height:56px;flex:none;border-radius:8px;display:block}
+.kicker{margin:0;color:var(--muted);font-size:13px;letter-spacing:.02em}
+.head-btns{margin-left:auto;align-self:flex-start;display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.btn{font:inherit;font-size:13px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn:focus-visible,.tab:focus-visible,.seg button:focus-visible,select:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.btn svg{width:15px;height:15px}
+.take{margin:0;font-size:16px;max-width:85ch}
+.take b{color:var(--mujer)}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}
+.tabs{display:flex;flex-wrap:wrap;gap:4px}
+.tab{font:inherit;font-size:14px;background:none;border:1px solid transparent;border-radius:8px;padding:6px 12px;color:var(--muted);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--panel);border-color:var(--line);color:var(--fg);font-weight:600;box-shadow:inset 0 -2px 0 var(--mujer)}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.ctrls label{display:flex;gap:6px;align-items:center}
+select{font:inherit;font-size:14px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--panel)}
+.seg button{font:inherit;font-size:13px;border:0;background:none;color:var(--muted);padding:6px 10px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--brand);color:var(--panel)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(178px,1fr));gap:12px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:grid;gap:4px;border-top:4px solid var(--mujer)}
+.tile.neutral{border-top-color:var(--brand)}
+.tile .l{margin:0;font-size:13px;color:var(--muted)}
+.tile .v{font-family:var(--display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.tile .d{font-size:12.5px;color:var(--muted)}
+.tile .d .h{color:var(--hombre);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.grid.one{grid-template-columns:minmax(0,1fr)}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:8px;align-content:start;min-width:0}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--brand);font-weight:600}
+.note{margin:0;font-size:13px;color:var(--muted)}
+.foot{margin:0;font-size:12px;color:var(--muted);border-top:1px dashed var(--line);padding-top:6px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.chart{width:100%;min-height:60px;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto;font-family:var(--body)}
+.chart text{fill:var(--muted);font-size:12px}
+.chart .lab{fill:var(--fg)}
+.chart .val{fill:var(--fg);font-variant-numeric:tabular-nums}
+.chart .grid-l{stroke:var(--line)}
+.ref{font-style:italic;opacity:.75}
+section[hidden]{display:none}
+section{display:grid;gap:14px}
+.lede{margin:0;max-width:80ch;color:var(--muted)}
+table{border-collapse:collapse;width:100%;font-size:13.5px;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{color:var(--muted);font-weight:600;font-size:12.5px}
+td.m{color:var(--mujer);font-weight:600}
+.tbl{overflow-x:auto}
+dl{margin:0;display:grid;gap:6px}
+dt{font-weight:600}
+dd{margin:0 0 6px;color:var(--muted)}
+.site-foot{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.chip{display:inline-block;font-size:12px;padding:1px 8px;border-radius:99px;background:var(--mujer-soft);color:var(--fg)}
+@media (max-width:600px){.gg-logo{width:44px;height:44px}.brand{flex-wrap:wrap}.head-btns{margin-left:0}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="head" id="inicio">
+    <div class="brand">
+      <img class="gg-logo" src="data:image/jpeg;base64,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" alt="Good Guys Insight">
+      <div>
+        <p class="kicker">INEI · Encuesta Nacional de Hogares (ENAHO) 2019–2025 · Perú</p>
+        <h1>Mujeres emprendedoras en el Perú</h1>
+      </div>
+      <div class="head-btns">
+        <button class="btn" id="btn-voz" type="button" aria-label="Escuchar el resumen en voz alta">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          <span>Escuchar resumen</span></button>
+        <button class="btn" id="btn-tema" type="button">◐ Modo oscuro</button>
+      </div>
+    </div>
+    <p class="take" id="take">Cargando…</p>
+  </header>
+
+  <div class="bar">
+    <div class="tabs" role="tablist" aria-label="Secciones">
+      <button class="tab" role="tab" data-tab="panorama">Panorama</button>
+      <button class="tab" role="tab" data-tab="perfil">Perfil</button>
+      <button class="tab" role="tab" data-tab="territorio">Territorio</button>
+      <button class="tab" role="tab" data-tab="formalidad">Formalidad y protección</button>
+      <button class="tab" role="tab" data-tab="ingresos">Ingresos y jornada</button>
+      <button class="tab" role="tab" data-tab="serie">Serie 2019–2025</button>
+    </div>
+    <div class="ctrls">
+      <label for="sel-anio">Año <select id="sel-anio"></select></label>
+      <span class="seg" role="group" aria-label="Universo">
+        <button type="button" data-u="mype" aria-pressed="true">Emprendedores MYPE</button>
+        <button type="button" data-u="todos" aria-pressed="false">Todos los emprendedores</button>
+      </span>
+    </div>
+  </div>
+
+  <!-- PANORAMA -->
+  <section id="panorama" data-panel="panorama">
+    <div class="tiles" id="tiles"></div>
+    <p class="note" id="tiles-note"></p>
+    <div class="grid">
+      <article class="card">
+        <p class="eyebrow">Gráfico 1</p>
+        <h3>Emprendedores según sexo, 2019–2025</h3>
+        <p class="note">Personas. La línea punteada es el porcentaje de mujeres (eje derecho).</p>
+        <div class="legend" id="lg-serie"></div>
+        <div class="chart" id="ch-serie"></div>
+        <p class="foot">En 2020 la ENAHO se levantó mayormente por teléfono y en contexto de pandemia. Fuente: INEI – ENAHO.</p>
+      </article>
+      <article class="card">
+        <p class="eyebrow">Gráfico 2</p>
+        <h3 id="h-sector">Emprendedores por sector económico</h3>
+        <p class="note">Distribución porcentual dentro de cada sexo. A la derecha, porcentaje de mujeres en el sector.</p>
+        <div class="legend lg-sexo"></div>
+        <div class="chart" data-comp="sector7"></div>
+        <p class="foot">a/ Referencial: coeficiente de variación mayor a 15%. Fuente: INEI – ENAHO.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- PERFIL -->
+  <section id="perfil" data-panel="perfil" hidden>
+    <h2>Perfil de las emprendedoras</h2>
+    <p class="lede">Cada gráfico compara la distribución de mujeres y hombres emprendedores. La etiqueta de la derecha indica qué porcentaje de cada grupo son mujeres.</p>
+    <div class="legend lg-sexo"></div>
+    <div class="grid">
+      <article class="card"><p class="eyebrow">Gráfico 3</p><h3>Grupo de edad</h3><div class="chart" data-comp="gedad"></div><p class="foot" data-prom="edad"></p></article>
+      <article class="card"><p class="eyebrow">Gráfico 4</p><h3>Nivel educativo alcanzado</h3><div class="chart" data-comp="neduc"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 5</p><h3>Lengua materna</h3><div class="chart" data-comp="lengua"></div><p class="foot">Lengua originaria: quechua, aimara y otras lenguas nativas. Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 6</p><h3>Jefatura de hogar</h3><div class="chart" data-comp="jefe"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 7</p><h3>Estado civil</h3><div class="chart" data-comp="ecivil"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 8</p><h3>Pobreza monetaria del hogar</h3><div class="chart" data-comp="pobre"></div><p class="foot">Fuente: INEI – ENAHO (Sumaria).</p></article>
+    </div>
+  </section>
+
+  <!-- TERRITORIO -->
+  <section id="territorio" data-panel="territorio" hidden>
+    <h2>Dónde están las emprendedoras</h2>
+    <div class="grid">
+      <article class="card" style="grid-row:span 2">
+        <p class="eyebrow">Gráfico 9</p>
+        <h3>Mujeres emprendedoras por región</h3>
+        <p class="note">Personas, ordenadas de mayor a menor. A la derecha, porcentaje de mujeres entre los emprendedores de la región.</p>
+        <div class="chart" id="ch-region"></div>
+        <p class="foot">Lima Metropolitana corresponde a la provincia de Lima; Región Lima, a las demás provincias del departamento. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO.</p>
+      </article>
+      <article class="card"><p class="eyebrow">Gráfico 10</p><h3>Área de residencia</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="area"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 11</p><h3>Región natural</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="regnat"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+    </div>
+  </section>
+
+  <!-- FORMALIDAD -->
+  <section id="formalidad" data-panel="formalidad" hidden>
+    <h2>Formalidad y protección social</h2>
+    <div class="legend lg-sexo"></div>
+    <div class="grid">
+      <article class="card"><p class="eyebrow">Gráfico 12</p><h3>Informalidad del empleo</h3><div class="chart" data-comp="informal"></div><p class="foot" id="foot-inf">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 13</p><h3>Registro del negocio en SUNAT</h3><div class="chart" data-comp="sunat"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 14</p><h3>Tipo de seguro de salud</h3><div class="chart" data-comp="seguro_salud"></div><p class="foot">Fuente: INEI – ENAHO (módulo 400).</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 15</p><h3>Sistema de pensiones</h3><div class="chart" data-comp="tipo_sp"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 16</p><h3>Tamaño de la unidad productiva</h3><div class="chart" data-comp="tamano_emp"></div><p class="foot">Número de trabajadores en la unidad productiva. Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 17</p><h3>Empleo decente (MTPE)</h3><div class="chart" data-comp="ed_decente"></div><p class="foot">Cumple los cinco componentes: registro en SUNAT, ingreso igual o mayor a la RMV, hasta 48 horas, seguro de salud y pensión. Fuente: INEI – ENAHO.</p></article>
+    </div>
+  </section>
+
+  <!-- INGRESOS -->
+  <section id="ingresos" data-panel="ingresos" hidden>
+    <h2>Ingresos y jornada</h2>
+    <div class="tiles" id="tiles-ing"></div>
+    <div class="grid">
+      <article class="card">
+        <p class="eyebrow">Gráfico 18</p>
+        <h3>Ingreso mensual promedio de la ocupación principal, 2019–2025</h3>
+        <p class="note">Soles corrientes. Incluye pagos en especie y autoconsumo.</p>
+        <div class="legend lg-sexo-l"></div>
+        <div class="chart" id="ch-ing"></div>
+        <p class="foot">Valores nominales; para comparar entre años deben deflactarse. Fuente: INEI – ENAHO.</p>
+      </article>
+      <article class="card">
+        <p class="eyebrow">Gráfico 19</p>
+        <h3 id="h-ingsec">Ingreso mensual promedio por sector</h3>
+        <p class="note">Soles. A la derecha, brecha de ingreso de las mujeres respecto de los hombres.</p>
+        <div class="legend lg-sexo"></div>
+        <div class="chart" id="ch-ingsec"></div>
+        <p class="foot">Sectores con menos de 30 mujeres en la muestra no se muestran. Fuente: INEI – ENAHO.</p>
+      </article>
+      <article class="card"><p class="eyebrow">Gráfico 20</p><h3>Ingreso respecto a la Remuneración Mínima Vital</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="d_rmv"></div><p class="foot" id="foot-rmv"></p></article>
+      <article class="card"><p class="eyebrow">Gráfico 21</p><h3>Horas semanales trabajadas</h3><div class="legend lg-sexo"></div><div class="chart" data-comp="rango_horas"></div><p class="foot">Total de horas en la ocupación principal y secundaria. Fuente: INEI – ENAHO.</p></article>
+    </div>
+  </section>
+
+  <!-- SERIE -->
+  <section id="serie" data-panel="serie" hidden>
+    <h2>Evolución de los principales indicadores de las mujeres emprendedoras</h2>
+    <article class="card">
+      <p class="eyebrow">Cuadro 1</p>
+      <h3 id="h-tabla">Mujeres emprendedoras, 2019–2025</h3>
+      <div class="tbl" id="tbl-serie"></div>
+      <p class="foot">TCPA: tasa de crecimiento promedio anual 2019–2025. pp: puntos porcentuales. a/ Referencial (CV mayor a 15%). Fuente: INEI – ENAHO.</p>
+    </article>
+    <div class="grid">
+      <article class="card"><p class="eyebrow">Gráfico 22</p><h3>Tasa de informalidad, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-inf"></div><p class="foot">2024 y 2025: informalidad construida con la metodología del consolidado de empleo OEE (el INEI no publicó ocupinf). Fuente: INEI – ENAHO.</p></article>
+      <article class="card"><p class="eyebrow">Gráfico 23</p><h3>Afiliación a un sistema de pensiones, 2019–2025</h3><div class="legend lg-sexo-l"></div><div class="chart" id="ch-pen"></div><p class="foot">Fuente: INEI – ENAHO.</p></article>
+    </div>
+  </section>
+
+  <footer class="site-foot">Fuente: Instituto Nacional de Estadística e Informática (INEI) – Encuesta Nacional de Hogares (ENAHO) 2019–2025. Elaboración: Good Guys Insight.</footer>
+</div>
+
+<script src="data.js"></script>
+<script>
+(function(){
+"use strict";
+const D = window.DATA, LAB = D.etiquetas;
+const IDX = {}; // u|anio|dim|cod|sexo
+D.registros.forEach(r => { IDX[r.slice(0,5).join("|")] = {pob:r[5], cv:r[6], n:r[7], ing:r[8], horas:r[9], edad:r[10]}; });
+const ANIOS = D.anios;
+const S = {anio: ANIOS[ANIOS.length-1], u: "mype", tab: "panorama"};
+try { const u = localStorage.getItem("gg-me-u"); if (u === "mype" || u === "todos") S.u = u; } catch(e) {}
+
+const g = (u,a,dim,cod,s) => IDX[[u,a,dim,cod,s].join("|")];
+const cods = (u,a,dim) => Object.keys(LAB[dim]||{}).map(Number).filter(c => g(u,a,dim,c,0) || g(u,a,dim,c,1) || g(u,a,dim,c,2)).sort((x,y)=>x-y);
+const tot = (u,a,s) => (g(u,a,"uno",1,s)||{}).pob || 0;
+const share = (u,a,dim,cod,s) => { const r = g(u,a,dim,cod,s), t = tot(u,a,s); return r && t ? 100*r.pob/t : 0; };
+const ref = r => r && r.cv != null && r.cv > 15;
+const nf = (x,d=0) => x == null || isNaN(x) ? "—" : x.toLocaleString("en-US",{minimumFractionDigits:d, maximumFractionDigits:d});
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const uName = () => S.u === "mype" ? "emprendedores MYPE" : "emprendedores";
+const ocupDim = () => S.u === "mype" ? "emp_mype" : "emprendedor";
+const NS = "http://www.w3.org/2000/svg";
+function el(tag, attrs, parent, text){ const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; if (parent) parent.appendChild(e); return e; }
+function svgIn(box, w, h){ box.innerHTML = ""; return el("svg", {viewBox:`0 0 ${w} ${h}`, role:"img"}, box); }
+const W = box => Math.max(300, Math.min(760, box.clientWidth || 560));
+
+/* ---------- Comparativo mujeres vs hombres (distribucion dentro de cada sexo) ---------- */
+function comp(box, dim){
+  const u = S.u, a = S.anio, cs = cods(u,a,dim);
+  const w = W(box), labW = Math.min(210, w*0.36), right = 64, bw = w - labW - right - 50;
+  const rowH = 40, h = cs.length*rowH + 8;
+  const svg = svgIn(box, w, h);
+  svg.setAttribute("aria-label", `Distribución de ${uName()} por ${dim}, mujeres y hombres`);
+  const mx = Math.max(1, ...cs.flatMap(c => [share(u,a,dim,c,1), share(u,a,dim,c,2)]));
+  cs.forEach((c,i) => {
+    const y = i*rowH + 4;
+    el("text",{x:0, y:y+19, class:"lab"}, svg, LAB[dim][c]);
+    [[2,"--mujer",0],[1,"--hombre",15]].forEach(([s,col,dy]) => {
+      const r = g(u,a,dim,c,s), v = share(u,a,dim,c,s), bwid = Math.max(1, bw*v/mx);
+      el("rect",{x:labW, y:y+dy+2, width:bwid, height:13, rx:2, fill:css(col)}, svg);
+      const t = el("text",{x:labW+bwid+5, y:y+dy+13, class:"val" + (ref(r)?" ref":"")}, svg, nf(v,1)+"%"+(ref(r)?" a/":""));
+      if (s === 2) t.setAttribute("font-weight","600");
+    });
+    const rt = g(u,a,dim,c,0), rm = g(u,a,dim,c,2);
+    const pm = rt && rm ? 100*rm.pob/rt.pob : 0;
+    el("text",{x:w-2, y:y+19, "text-anchor":"end", class:"val", fill:css("--mujer"), style:`fill:${css("--mujer")};font-weight:600`}, svg, nf(pm,1)+"% M");
+  });
+}
+
+/* ---------- Barras horizontales simples (region) ---------- */
+function regionChart(box){
+  const u = S.u, a = S.anio, cs = cods(u,a,"region").filter(c => g(u,a,"region",c,2));
+  cs.sort((x,y) => g(u,a,"region",y,2).pob - g(u,a,"region",x,2).pob);
+  const w = W(box), labW = 128, right = 70, bw = w - labW - right - 70, rowH = 22, h = cs.length*rowH + 6;
+  const svg = svgIn(box, w, h);
+  svg.setAttribute("aria-label","Mujeres emprendedoras por región");
+  const mx = Math.max(...cs.map(c => g(u,a,"region",c,2).pob));
+  cs.forEach((c,i) => {
+    const y = i*rowH + 3, r = g(u,a,"region",c,2), t = g(u,a,"region",c,0), bwid = Math.max(1,bw*r.pob/mx);
+    el("text",{x:0, y:y+14, class:"lab"}, svg, LAB.region[c]);
+    el("rect",{x:labW, y:y+3, width:bwid, height:14, rx:2, fill:css("--mujer"), opacity: ref(r)?0.55:1}, svg);
+    el("text",{x:labW+bwid+5, y:y+14, class:"val"+(ref(r)?" ref":"")}, svg, nf(r.pob)+(ref(r)?" a/":""));
+    el("text",{x:w-2, y:y+14, "text-anchor":"end", style:`fill:${css("--mujer")};font-weight:600`}, svg, nf(100*r.pob/t.pob,1)+"% M");
+  });
+}
+
+/* ---------- Lineas ---------- */
+function lineChart(box, series, opt){
+  const w = W(box), h = 250, m = {l:58, r: opt.y2 ? 50 : 18, t:14, b:28};
+  const svg = svgIn(box, w, h);
+  svg.setAttribute("aria-label", opt.label || "Serie 2019-2025");
+  const xs = ANIOS, iw = w-m.l-m.r, ih = h-m.t-m.b;
+  const ys = series.filter(s=>!s.y2).flatMap(s => s.v.filter(v=>v!=null));
+  let lo = opt.min != null ? opt.min : Math.min(...ys), hi = Math.max(...ys);
+  const pad = (hi-lo)*0.12 || 1; lo = opt.min != null ? opt.min : Math.max(0, lo-pad); hi = hi + pad;
+  const X = i => m.l + iw*i/(xs.length-1), Y = v => m.t + ih*(1-(v-lo)/(hi-lo));
+  for (let k=0;k<=4;k++){ const v = lo + (hi-lo)*k/4, y = Y(v);
+    el("line",{x1:m.l, x2:w-m.r, y1:y, y2:y, class:"grid-l"}, svg);
+    el("text",{x:m.l-6, y:y+4, "text-anchor":"end"}, svg, opt.fmt(v)); }
+  xs.forEach((a,i) => el("text",{x:X(i), y:h-8, "text-anchor":"middle", style: a===S.anio?`fill:${css("--fg")};font-weight:600`:""}, svg, a));
+  let Y2;
+  if (opt.y2){ const v2 = series.filter(s=>s.y2).flatMap(s=>s.v); const l2 = Math.max(0, Math.min(...v2)-3), h2 = Math.max(...v2)+3;
+    Y2 = v => m.t + ih*(1-(v-l2)/(h2-l2));
+    [l2,(l2+h2)/2,h2].forEach(v => el("text",{x:w-m.r+6, y:Y2(v)+4}, svg, nf(v,0)+"%")); }
+  const labs = [];
+  series.forEach(s => {
+    const f = s.y2 ? Y2 : Y, pts = s.v.map((v,i) => v==null?null:[X(i), f(v)]).filter(Boolean);
+    if (s.area){ const p = `M${pts[0][0]},${Y(lo)} L` + pts.map(p=>p.join(",")).join(" L") + ` L${pts[pts.length-1][0]},${Y(lo)} Z`;
+      el("path",{d:p, fill:s.c, opacity:0.10}, svg); }
+    el("path",{d:"M"+pts.map(p=>p.join(",")).join(" L"), fill:"none", stroke:s.c, "stroke-width": s.w||2.5, "stroke-dasharray": s.dash||""}, svg);
+    s.v.forEach((v,i) => { if (v==null) return; const sel = xs[i]===S.anio;
+      el("circle",{cx:X(i), cy:f(v), r: sel?5:3, fill: sel? s.c : css("--panel"), stroke:s.c, "stroke-width":2}, svg);
+      if (sel) labs.push({x:X(i), y:f(v), last:i===xs.length-1, first:i===0, c:s.c, t:(s.y2?nf(v,1)+"%":opt.fmt(v,true))});
+    });
+  });
+  /* etiquetas del anio seleccionado sin superposicion */
+  labs.sort((p,q) => p.y - q.y);
+  labs.forEach((L,k) => { L.ly = L.y - 10; if (k>0 && L.ly - labs[k-1].ly < 15) L.ly = labs[k-1].ly + 15; });
+  labs.forEach(L => {
+    const anchor = L.last ? "end" : (L.first ? "start" : "middle"), dx = L.last ? -8 : (L.first ? 8 : 0);
+    const t = el("text",{x:L.x+dx, y:Math.max(12, L.ly), "text-anchor":anchor, class:"val", style:`fill:${L.c};font-weight:600;paint-order:stroke;stroke:${css("--panel")};stroke-width:4px`}, svg, L.t);
+  });
+}
+
+/* ---------- Leyendas ---------- */
+function legends(){
+  const M = css("--mujer"), H = css("--hombre");
+  document.querySelectorAll(".lg-sexo").forEach(e => e.innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span>% M: participación de mujeres</span>`);
+  document.querySelectorAll(".lg-sexo-l").forEach(e => e.innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span>`);
+  document.getElementById("lg-serie").innerHTML = `<span><i style="background:${M}"></i>Mujeres</span><span><i style="background:${H}"></i>Hombres</span><span><i style="background:${css("--brand")}"></i>% mujeres</span>`;
+}
+
+/* ---------- Indicadores ---------- */
+function ind(a, s){
+  const u = S.u, t = g(u,a,"uno",1,s) || {};
+  const oc = g("ocup",a,ocupDim(),1,s), ocT = g("ocup",a,"uno",1,s);
+  const sh = (dim,c) => share(u,a,dim,c,s);
+  return {
+    pob: t.pob, cvp: t.cv, ing: t.ing, horas: t.horas, edad: t.edad,
+    tasa: oc && ocT ? 100*oc.pob/ocT.pob : null,
+    pctM: s===2 ? 100*t.pob/tot(u,a,0) : null,
+    inf: sh("informal",1), pen: 100 - sh("tipo_sp",3), sunat: sh("sunat",1)+sh("sunat",2),
+    rmv: sh("d_rmv",1), dec: sh("ed_decente",1), sis: sh("seguro_salud",3), sinseg: sh("seguro_salud",4),
+    sup: sh("neduc",4)+sh("neduc",5)+sh("neduc",6), rural: sh("area",2), orig: sh("lengua",2)
+  };
+}
+const RMV = a => a <= 2021 ? 930 : (a <= 2024 ? 1025 : 1130);
+
+function tile(l, v, d, cls){ return `<div class="tile ${cls||""}"><p class="l">${l}</p><div class="v">${v}</div><span class="d">${d}</span></div>`; }
+function delta(x, prev, pp, dec=1){
+  if (x == null || prev == null) return "";
+  const d = pp ? x - prev : 100*(x/prev - 1);
+  return `${d>=0?"+":""}${nf(d,dec)}${pp?" pp":"%"} vs. ${S.anio-1}`;
+}
+
+function render(){
+  const a = S.anio, M = ind(a,2), H = ind(a,1), P = ANIOS.includes(a-1) ? ind(a-1,2) : null;
+  const brecha = 100*(H.ing - M.ing)/H.ing;
+  document.getElementById("tiles").innerHTML =
+    tile(`Mujeres ${uName()}`, nf(M.pob), (P?delta(M.pob,P.pob,false):"") + (M.cvp>15?" · a/":"")) +
+    tile("Participación de mujeres", nf(M.pctM,1)+"%", P?delta(M.pctM,P.pctM,true):"") +
+    tile("Tasa de emprendimiento", nf(M.tasa,1)+"%", `de las ocupadas · <span class="h">hombres ${nf(H.tasa,1)}%</span>`) +
+    tile("Informalidad", nf(M.inf,1)+"%", `<span class="h">hombres ${nf(H.inf,1)}%</span>`) +
+    tile("Ingreso mensual promedio", "S/ "+nf(M.ing,0), `<span class="h">hombres S/ ${nf(H.ing,0)}</span> · brecha ${nf(brecha,1)}%`) +
+    tile("Afiliadas a pensiones", nf(M.pen,1)+"%", `<span class="h">hombres ${nf(H.pen,1)}%</span>`);
+  document.getElementById("tiles-note").textContent = `Indicadores de mujeres ${uName()}, ${a}. Variación respecto de ${a-1}: en porcentaje para personas y en puntos porcentuales (pp) para tasas.`;
+  document.getElementById("take").innerHTML =
+    `En ${a}, <b>${nf(M.pob)} mujeres</b> conducían un emprendimiento${S.u==="mype"?" MYPE":""}, el <b>${nf(M.pctM,1)}%</b> del total de ${uName()}. ` +
+    `El <b>${nf(M.inf,1)}%</b> de ellas tenía empleo informal y su ingreso mensual promedio fue de <b>S/ ${nf(M.ing,0)}</b>, ${nf(brecha,1)}% menor que el de los hombres.`;
+  document.getElementById("tiles-ing").innerHTML =
+    tile("Ingreso mensual promedio, mujeres", "S/ "+nf(M.ing,0), `<span class="h">hombres S/ ${nf(H.ing,0)}</span>`) +
+    tile("Brecha de ingreso", nf(brecha,1)+"%", "respecto del ingreso de los hombres") +
+    tile("Ingreso igual o mayor a la RMV", nf(M.rmv,1)+"%", `RMV S/ ${nf(RMV(a))} · <span class="h">hombres ${nf(H.rmv,1)}%</span>`) +
+    tile("Horas semanales promedio", nf(M.horas,1), `<span class="h">hombres ${nf(H.horas,1)}</span>`);
+  document.getElementById("foot-rmv").textContent = `RMV de ${a}: S/ ${nf(RMV(a))}. Ingreso de la ocupación principal. Fuente: INEI – ENAHO.`;
+  document.querySelectorAll('[data-prom="edad"]').forEach(e => e.textContent = `Edad promedio: mujeres ${nf(M.edad,1)} años, hombres ${nf(H.edad,1)} años. Fuente: INEI – ENAHO.`);
+  const fi = document.getElementById("foot-inf");
+  fi.textContent = (a >= 2024 ? `${a}: informalidad construida con la metodología del consolidado de empleo OEE. ` : "Variable ocupinf del INEI. ") + "Fuente: INEI – ENAHO.";
+  document.getElementById("h-sector").textContent = `${uName()[0].toUpperCase()+uName().slice(1)} por sector económico, ${a}`;
+  document.getElementById("h-ingsec").textContent = `Ingreso mensual promedio por sector, ${a}`;
+  legends(); charts();
+}
+
+function charts(){
+  const vis = document.querySelector(`section[data-panel="${S.tab}"]`);
+  vis.querySelectorAll("[data-comp]").forEach(b => comp(b, b.dataset.comp));
+  const M = css("--mujer"), H = css("--hombre"), B = css("--brand");
+  if (S.tab === "panorama"){
+    lineChart(document.getElementById("ch-serie"), [
+      {c:M, v:ANIOS.map(a=>tot(S.u,a,2)), area:true},
+      {c:H, v:ANIOS.map(a=>tot(S.u,a,1))},
+      {c:B, v:ANIOS.map(a=>100*tot(S.u,a,2)/tot(S.u,a,0)), y2:true, dash:"5 4", w:2}
+    ], {fmt:(v,lbl)=> lbl ? nf(v) : nf(v/1e6,1)+" M", y2:true, label:"Emprendedores por sexo 2019-2025"});
+  }
+  if (S.tab === "territorio") regionChart(document.getElementById("ch-region"));
+  if (S.tab === "ingresos"){
+    lineChart(document.getElementById("ch-ing"), [
+      {c:M, v:ANIOS.map(a=>(g(S.u,a,"uno",1,2)||{}).ing), area:true},
+      {c:H, v:ANIOS.map(a=>(g(S.u,a,"uno",1,1)||{}).ing)}
+    ], {fmt:(v,l)=>"S/ "+nf(v,0), label:"Ingreso promedio por sexo"});
+    ingSector(document.getElementById("ch-ingsec"));
+  }
+  if (S.tab === "serie"){
+    lineChart(document.getElementById("ch-inf"), [
+      {c:M, v:ANIOS.map(a=>share(S.u,a,"informal",1,2)), area:true},
+      {c:H, v:ANIOS.map(a=>share(S.u,a,"informal",1,1))}], {fmt:(v)=>nf(v,1)+"%", label:"Informalidad"});
+    lineChart(document.getElementById("ch-pen"), [
+      {c:M, v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,2)), area:true},
+      {c:H, v:ANIOS.map(a=>100-share(S.u,a,"tipo_sp",3,1))}], {fmt:(v)=>nf(v,1)+"%", min:0, label:"Afiliación a pensiones"});
+    tabla();
+  }
+}
+
+function ingSector(box){
+  const u = S.u, a = S.anio, cs = cods(u,a,"sector7").filter(c => { const r = g(u,a,"sector7",c,2); return r && r.n >= 30 && g(u,a,"sector7",c,1); });
+  const w = W(box), labW = 150, right = 70, bw = w-labW-right-60, rowH = 40, h = cs.length*rowH+6;
+  const svg = svgIn(box, w, h);
+  svg.setAttribute("aria-label","Ingreso promedio por sector y sexo");
+  const mx = Math.max(...cs.flatMap(c => [g(u,a,"sector7",c,1).ing, g(u,a,"sector7",c,2).ing]));
+  cs.forEach((c,i) => {
+    const y = i*rowH+4, rm = g(u,a,"sector7",c,2), rh = g(u,a,"sector7",c,1);
+    el("text",{x:0, y:y+19, class:"lab"}, svg, LAB.sector7[c]);
+    [[rm,"--mujer",0],[rh,"--hombre",15]].forEach(([r,col,dy]) => {
+      const bwid = Math.max(1, bw*r.ing/mx);
+      el("rect",{x:labW, y:y+dy+2, width:bwid, height:13, rx:2, fill:css(col)}, svg);
+      el("text",{x:labW+bwid+5, y:y+dy+13, class:"val"}, svg, "S/ "+nf(r.ing,0));
+    });
+    const b = 100*(rh.ing-rm.ing)/rh.ing;
+    el("text",{x:w-2, y:y+19, "text-anchor":"end", style:`fill:${css("--mujer")};font-weight:600`}, svg, (b>=0?"−":"+")+nf(Math.abs(b),1)+"%");
+  });
+}
+
+function tabla(){
+  const u = S.u, rows = [
+    ["Mujeres emprendedoras (personas)", a=>tot(u,a,2), 0, "pct"],
+    ["Participación de mujeres (%)", a=>100*tot(u,a,2)/tot(u,a,0), 1, "pp"],
+    ["Tasa de emprendimiento femenina (%)", a=>ind(a,2).tasa, 1, "pp"],
+    ["Informalidad (%)", a=>share(u,a,"informal",1,2), 1, "pp"],
+    ["Negocio registrado en SUNAT (%)", a=>share(u,a,"sunat",1,2)+share(u,a,"sunat",2,2), 1, "pp"],
+    ["Afiliadas a pensiones (%)", a=>100-share(u,a,"tipo_sp",3,2), 1, "pp"],
+    ["Solo con SIS (%)", a=>share(u,a,"seguro_salud",3,2), 1, "pp"],
+    ["Educación superior (%)", a=>share(u,a,"neduc",4,2)+share(u,a,"neduc",5,2)+share(u,a,"neduc",6,2), 1, "pp"],
+    ["Ingreso mensual promedio (S/)", a=>(g(u,a,"uno",1,2)||{}).ing, 0, "pct"],
+    ["Brecha de ingreso vs. hombres (%)", a=>{const m=(g(u,a,"uno",1,2)||{}).ing, h=(g(u,a,"uno",1,1)||{}).ing; return 100*(h-m)/h;}, 1, "pp"],
+    ["Empleo decente (%)", a=>share(u,a,"ed_decente",1,2), 1, "pp"]
+  ];
+  const n = ANIOS.length-1;
+  let html = `<table><thead><tr><th>Indicador</th>${ANIOS.map(a=>`<th>${a}</th>`).join("")}<th>Var. ${ANIOS[n-1]}–${ANIOS[n]}</th><th>TCPA ${ANIOS[0]}–${ANIOS[n]}</th></tr></thead><tbody>`;
+  rows.forEach(([lab,f,d,t]) => {
+    const v = ANIOS.map(f), last = v[n], prev = v[n-1];
+    const var1 = t==="pct" ? `${nf(100*(last/prev-1),1)}%` : `${last-prev>=0?"+":""}${nf(last-prev,1)} pp`;
+    const tcpa = t==="pct" ? `${nf(100*(Math.pow(last/v[0],1/n)-1),1)}%` : "—";
+    html += `<tr><td>${lab}</td>${v.map((x,i)=>`<td class="${ANIOS[i]===S.anio?"m":""}">${nf(x,d)}</td>`).join("")}<td>${var1}</td><td>${tcpa}</td></tr>`;
+  });
+  document.getElementById("tbl-serie").innerHTML = html + "</tbody></table>";
+  document.getElementById("h-tabla").textContent = `Mujeres ${uName()}, 2019–2025`;
+}
+
+/* ---------- Controles ---------- */
+const sel = document.getElementById("sel-anio");
+ANIOS.slice().reverse().forEach(a => { const o = document.createElement("option"); o.value = a; o.textContent = a; sel.appendChild(o); });
+sel.value = S.anio;
+sel.addEventListener("change", () => { S.anio = +sel.value; render(); });
+document.querySelectorAll(".seg button").forEach(b => {
+  b.setAttribute("aria-pressed", b.dataset.u === S.u);
+  b.addEventListener("click", () => {
+    S.u = b.dataset.u; try { localStorage.setItem("gg-me-u", S.u); } catch(e) {}
+    document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-pressed", x.dataset.u === S.u));
+    render();
+  });
+});
+const TABS = [...document.querySelectorAll(".tab")].map(t => t.dataset.tab);
+function setTab(t, push){
+  if (!TABS.includes(t)) t = "panorama";
+  S.tab = t;
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
+  document.querySelectorAll("section[data-panel]").forEach(s => s.hidden = s.dataset.panel !== t);
+  if (push) try { history.replaceState(null, "", "#"+t); } catch(e) { location.hash = t; }
+  charts();
+}
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => setTab(b.dataset.tab, true)));
+window.addEventListener("hashchange", () => setTab(location.hash.slice(1)));
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { legends(); charts(); }, 150); });
+
+/* ---------- Tema ---------- */
+const root = document.documentElement, bt = document.getElementById("btn-tema");
+try { const t = localStorage.getItem("gg-tema"); if (t === "dark" || t === "light") root.dataset.theme = t; } catch(e) {}
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const lbl = () => { bt.textContent = isDark() ? "◐ Modo claro" : "◐ Modo oscuro"; };
+bt.addEventListener("click", () => { root.dataset.theme = isDark() ? "light" : "dark"; try { localStorage.setItem("gg-tema", root.dataset.theme); } catch(e) {} lbl(); legends(); charts(); });
+lbl();
+
+/* ---------- Lectura en voz alta ---------- */
+const bv = document.getElementById("btn-voz");
+bv.addEventListener("click", () => {
+  try {
+    const sy = window.speechSynthesis;
+    if (!sy) { bv.querySelector("span").textContent = "Voz no disponible"; return; }
+    if (sy.speaking) { sy.cancel(); bv.querySelector("span").textContent = "Escuchar resumen"; return; }
+    const txt = document.getElementById("take").textContent.replace(/S\/ /g, "soles ").replace(/%/g, " por ciento");
+    const ut = new SpeechSynthesisUtterance(txt); ut.lang = "es-PE"; ut.rate = 1;
+    const v = sy.getVoices().find(v => /^es/i.test(v.lang)); if (v) ut.voice = v;
+    ut.onend = () => bv.querySelector("span").textContent = "Escuchar resumen";
+    bv.querySelector("span").textContent = "Detener"; sy.speak(ut);
+  } catch(e) { bv.querySelector("span").textContent = "Voz no disponible"; }
+});
+
+render();
+setTab(location.hash.slice(1) || "panorama");
+})();
+</script>
+</body>
+</html>
